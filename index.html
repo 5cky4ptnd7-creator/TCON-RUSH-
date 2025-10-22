@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>TCon’s Rush</title>
+  <meta name="theme-color" content="#0b1020">
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <style>
+    :root { --bg:#0b1020; --ui:#e5e7eb; --accent:#f97316; }
+    html,body{height:100%;margin:0;background:var(--bg);color:var(--ui);font-family:system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif}
+    #wrap{display:flex;flex-direction:column;min-height:100%;}
+    header{padding:10px 14px;font-weight:600;letter-spacing:.2px}
+    #canvas{flex:1;display:block;width:100vw;height:calc(100vh - 140px);touch-action:none;background:linear-gradient(#0b1020,#0a0e1a)}
+    #hud{padding:6px 14px;font-size:12px;opacity:.9}
+    #controls{position:fixed;inset-inline:0;bottom:10px;display:flex;justify-content:center;gap:14px;z-index:10}
+    .btn{background:#111827;color:#e5e7eb;border:none;border-radius:14px;padding:12px 18px;font-size:18px;
+         box-shadow:0 6px 18px rgba(0,0,0,.35), inset 0 0 0 1px rgba(255,255,255,.05);}
+    .btn:active{transform:scale(.97)}
+    .small{font-size:14px;padding:10px 14px}
+  </style>
+</head>
+<body>
+  <div id="wrap">
+    <header>TCon’s Rush</header>
+    <canvas id="canvas" width="1024" height="576"></canvas>
+    <div id="hud">Move: ◀ ▶ • Jump: ⤊ • Pause: ▌▌ • Restart: ⟳ • Collect <span style="color:#fca311">Hot Cheetos</span> to heal; 0 HP = hibernate 😴</div>
+  </div>
+  <div id="controls" role="group" aria-label="Touch controls">
+    <button class="btn" id="left" aria-label="Move left">◀</button>
+    <button class="btn" id="right" aria-label="Move right">▶</button>
+    <button class="btn" id="jump" aria-label="Jump">⤊</button>
+    <button class="btn small" id="pause" aria-label="Pause">▌▌</button>
+    <button class="btn small" id="restart" aria-label="Restart">⟳</button>
+  </div>
+
+  <script type="module">
+    import { runGame } from './assets/tcons_rush_mobile.js';
+    // PWA registration
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js');
+      });
+    }
+    const canvas = document.getElementById('canvas');
+    const hudButtons = {
+      left: document.getElementById('left'),
+      right: document.getElementById('right'),
+      jump: document.getElementById('jump'),
+      pause: document.getElementById('pause'),
+      restartBtn: document.getElementById('restart')
+    };
+    runGame(canvas, hudButtons);
+  </script>
+</body>
+</html>
